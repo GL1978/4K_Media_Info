@@ -1,0 +1,68 @@
+<!-- search_results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Search Results</h1>
+    <p><a href="/">Back to Search</a></p>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>File Size</th>
+            <th>Overall Bitrate</th>
+            <th>Video Codec</th>
+            <th>Video Bitrate</th>
+            <th>Video Framerate</th>
+            <th>HDR Format</th>
+            <th>Mastering Display Color Primaries</th>
+            <th>Mastering Display Luminance</th>
+            <th>Max Fall</th>
+            <th>Max CLL</th>
+        </tr>
+        {% for row in search_results %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+            <td>{{ row[9] }}</td>
+            <td>{{ row[10] }}</td>
+            <td>{{ row[11] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="?query={{ query }}&page=1">First</a>
+            <a href="?query={{ query }}&page={{ current_page - 1 }}">Previous</a>
+        {% endif %}
+
+        {% for page in range(1, total_pages + 1) %}
+            {% if page == current_page %}
+                <span>{{ page }}</span>
+            {% else %}
+                <a href="?query={{ query }}&page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if current_page < total_pages %}
+            <a href="?query={{ query }}&page={{ current_page + 1 }}">Next</a>
+            <a href="?query={{ query }}&page={{ total_pages }}">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
