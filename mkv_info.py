@@ -132,7 +132,7 @@ def extract_fields_from_media_info(media_info):
         val = str(video_track.get('MaxCLL'))
         media_details["MaxCLL"] = val.replace("cd/m2", "").strip()
 
-    # # Extract audio track information
+    # Extract audio track information
     # audio_track = next((track for track in media_info['media']['track'] if track['@type'] == 'Audio'), None)
     # if audio_track:
     #     audio_bitrate = audio_track.get('BitRate')
