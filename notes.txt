@@ -1,0 +1,14 @@
+DROP VIEW IF EXISTS VW_4K_MEDIA_INFO;
+
+CREATE VIEW VW_4K_MEDIA_INFO as SELECT *,cast (SUBSTR(mastering_display_luminance, INSTR(mastering_display_luminance, 'max: ') + LENGTH('max: '), INSTR(SUBSTR(mastering_display_luminance, INSTR(mastering_display_luminance, 'max: ') + LENGTH('max: ')), ' ') - 1) AS INTEGER) AS mastering_display_luminance_max  FROM MEDIA_INFO WHERE video_format='HEVC';
+
+SELECT
+    mastering_display_luminance_max,
+    COUNT(*) AS cnt
+FROM
+    VW_4K_MEDIA_INFO
+GROUP BY
+    mastering_display_luminance_max
+ORDER BY
+    mastering_display_luminance_max;
+

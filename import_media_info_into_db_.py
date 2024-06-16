@@ -29,6 +29,7 @@ class MediaInfoModel(Base):
     formatted_video_bit_rate = Column(String)
     frame_rate = Column(Float)
     hdr_format = Column(String)
+    color_primaries = Column(String)
     mastering_display_color_primaries = Column(String)
     mastering_display_luminance = Column(String)
     max_fall = Column(Integer)
@@ -60,6 +61,7 @@ def prepare_media_info(file_name, media_info_json):
         formatted_video_bit_rate=convert_bitrate_to_kbps(video_info.get('bit_rate')),
         frame_rate=video_info.get('frame_rate'),
         hdr_format=video_info.get('hdr_format'),
+        color_primaries=video_info.get('color_primaries'),
         mastering_display_color_primaries=video_info.get('mastering_display_color_primaries'),
         mastering_display_luminance=video_info.get('mastering_display_luminance'),
         max_fall=video_info.get('maximum_frameaverage_light_level'),
@@ -112,6 +114,7 @@ def bulk_save_or_update(session, media_info_list, file_names):
                 existing.formatted_video_bit_rate = media_info.formatted_video_bit_rate
                 existing.frame_rate = media_info.frame_rate
                 existing.hdr_format = media_info.hdr_format
+                existing.color_primaries = media_info.color_primaries
                 existing.mastering_display_color_primaries = media_info.mastering_display_color_primaries
                 existing.mastering_display_luminance = media_info.mastering_display_luminance
                 existing.max_fall = media_info.max_fall
@@ -166,4 +169,6 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=100, help='Number of records to insert in each batch.')
     #args = parser.parse_args()
     #main(args.media_files_volume, args.media_files_path, args.database_path, args.batch_size)
-    main("F:/", "sqlite:///D:/MakeMKV/media_info/media_info_new.db", 100)
+    main("G:/", "sqlite:///D:/MakeMKV/media_info/media_info_new.db", 100)
+
+#select *, json_extract(full_json, '$.tracks[1].color_primaries') color_primaries from VW_4K_MEDIA_INFO where mastering_display_color_primaries NOT like '%2020%' AND mastering_display_color_primaries NOT like '%P3%'
