@@ -1,58 +1,11 @@
-import shutil
-import subprocess
 import json
 import os
+import shutil
+import subprocess
 import traceback
 from pathlib import Path
 
-
-def coalesce(*args):
-    return next((arg for arg in args if arg is not None and len(str(arg).strip()) > 0), None)
-
-
-def dict_to_delimited_string(dictionary, delimiter=','):
-    delimited_string = delimiter.join([f"{value}" for key, value in dictionary.items()])
-    return delimited_string
-
-
-def is_4k_resolution(width, height):
-    # Check if the resolution qualifies as 4K
-    return (width == 3840 and height == 2160) or (width == 4096 and height == 2160)
-
-
-def format_file_size(size_bytes):
-    # Convert bytes to a human-readable format (KB, MB, GB)
-    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
-        if size_bytes < 1024:
-            return f"{size_bytes:.2f} {unit}"
-        size_bytes /= 1024
-
-
-def convert_bitrate_to_mbps(bitrate):
-    # Convert bit rate from bps to Mbps
-    if bitrate:
-        return f"{int(bitrate) / 1_000_000:.2f} Mbps"
-    return None
-
-
-def convert_bitrate_to_kbps(bitrate):
-    # Convert bit rate from bps to Kbps
-    if bitrate:
-        return f"{int(bitrate) / 1_000:.2f} Kbps"
-    return None
-
-
-def format_duration(duration_ms):
-    # Convert duration from ms to HH:MM:SS format
-    if duration_ms:
-        duration_ms_str = str(duration_ms)
-        duration_ms = int(duration_ms_str.replace('.', '') if "." in duration_ms_str else duration_ms)
-        seconds = int(duration_ms) / 1000
-        hours = int(seconds // 3600)
-        minutes = int((seconds % 3600) // 60)
-        seconds = int(seconds % 60)
-        return f"{hours:02}:{minutes:02}:{seconds:02}"
-    return None
+from globals import dict_to_delimited_string, format_duration, format_file_size, convert_bitrate_to_mbps
 
 
 def get_mediainfo(file_path):

@@ -1,5 +1,4 @@
 import os
-import shutil
 from pprint import pprint
 from tqdm import tqdm
 

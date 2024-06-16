@@ -1,7 +1,9 @@
-from globals import media_info_table_columns, media_info_table_columns_def
 import os
-import pandas as pd
 import sqlite3
+
+import pandas as pd
+
+from globals import media_info_table_columns, media_info_table_columns_def
 
 
 def import_media_info_into_db(directory_path, file_name_pattern, delimiter, db_path, table_name):
