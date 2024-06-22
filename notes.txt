@@ -1,6 +1,23 @@
+ALTER TABLE MEDIA_INFO ADD COLUMN max_mdl INTEGER;
+
+UPDATE media_info set max_mdl =
+CAST(
+        TRIM(
+            REPLACE(
+                SUBSTR(mastering_display_luminance, INSTR(mastering_display_luminance, 'max:') + 4),
+                'cd/m2',
+                ''
+            )
+        )
+        AS INTEGER
+    );
+
+update media_info set max_cll = replace(max_cll,' cd/m2','');
+update media_info set max_fall = replace(max_fall,' cd/m2','');
+
 DROP VIEW IF EXISTS VW_4K_MEDIA_INFO;
 
-CREATE VIEW VW_4K_MEDIA_INFO as SELECT *,cast (SUBSTR(mastering_display_luminance, INSTR(mastering_display_luminance, 'max: ') + LENGTH('max: '), INSTR(SUBSTR(mastering_display_luminance, INSTR(mastering_display_luminance, 'max: ') + LENGTH('max: ')), ' ') - 1) AS INTEGER) AS mastering_display_luminance_max  FROM MEDIA_INFO WHERE video_format='HEVC';
+CREATE VIEW VW_4K_MEDIA_INFO as SELECT * FROM MEDIA_INFO WHERE video_format='HEVC';
 
 SELECT
     mastering_display_luminance_max,

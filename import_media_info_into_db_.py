@@ -7,7 +7,7 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from globals import get_volume_label, format_duration, format_file_size, convert_bitrate_to_mbps, \
-    convert_bitrate_to_kbps
+    convert_bitrate_to_kbps, max_mdl, cd_m2_value
 
 volume_label = None
 Base = declarative_base()
@@ -32,6 +32,7 @@ class MediaInfoModel(Base):
     color_primaries = Column(String)
     mastering_display_color_primaries = Column(String)
     mastering_display_luminance = Column(String)
+    max_mdl = Column(Integer)
     max_fall = Column(Integer)
     max_cll = Column(Integer)
     full_json = Column(Text, nullable=False)
@@ -64,8 +65,9 @@ def prepare_media_info(file_name, media_info_json):
         color_primaries=video_info.get('color_primaries'),
         mastering_display_color_primaries=video_info.get('mastering_display_color_primaries'),
         mastering_display_luminance=video_info.get('mastering_display_luminance'),
-        max_fall=video_info.get('maximum_frameaverage_light_level'),
-        max_cll=video_info.get('maximum_content_light_level'),
+        max_mdl=max_mdl(video_info.get('mastering_display_luminance')),
+        max_fall=cd_m2_value(video_info.get('maximum_frameaverage_light_level')),
+        max_cll=cd_m2_value(video_info.get('maximum_content_light_level')),
         full_json=media_info_json
     )
 
@@ -117,8 +119,9 @@ def bulk_save_or_update(session, media_info_list, file_names):
                 existing.color_primaries = media_info.color_primaries
                 existing.mastering_display_color_primaries = media_info.mastering_display_color_primaries
                 existing.mastering_display_luminance = media_info.mastering_display_luminance
-                existing.max_fall = media_info.max_fall
-                existing.max_cll = media_info.max_cll
+                existing.max_mdl = media_info.max_mdl
+                existing.max_fall = media_info.max_fall if media_info.max_fall is not None else existing.max_fall
+                existing.max_cll = media_info.max_cll if media_info.max_cll is not None else existing.max_cll
                 existing.full_json = media_info.full_json
 
     if insert_list:

@@ -60,9 +60,37 @@ def is_4k_resolution(width, height):
     return (width == 3840 and height == 2160) or (width == 4096 and height == 2160)
 
 
+def max_mdl(mdl):
+    try:
+        if not mdl:
+            return None
+
+        # Find the part of the string that contains the max value
+        parts = mdl.split(",")
+        if len(parts) < 2:
+            raise ValueError("Invalid input format")
+
+        max_part = parts[1].strip()
+        max_value_str = max_part.split()[1]
+
+        # Extract the numeric value
+        return int(float(max_value_str))
+
+        return max_value
+    except (IndexError, ValueError) as e:
+        return None
+
+
 def dict_to_delimited_string(dictionary, delimiter=','):
     delimited_string = delimiter.join([f"{value}" for key, value in dictionary.items()])
     return delimited_string
+
+
+def cd_m2_value(input_string):
+    try:
+        return int(input_string.replace(' cd/m2', ''))
+    except ValueError as e:
+        return None
 
 
 def extract_after_pattern(input_string):
