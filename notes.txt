@@ -14,6 +14,8 @@ CAST(
 
 update media_info set max_cll = replace(max_cll,' cd/m2','');
 update media_info set max_fall = replace(max_fall,' cd/m2','');
+update media_info set formatted_video_bit_rate = ((video_bit_rate/1000) || ' Kbps');
+COMMIT;
 
 DROP VIEW IF EXISTS VW_4K_MEDIA_INFO;
 
